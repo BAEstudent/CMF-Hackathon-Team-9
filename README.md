@@ -10,3 +10,5 @@ There are also several other files.
 - `couriers distribution.ipynb` is the code used for preparing the dataset (addind new features and cleaning the data) for the ML part.
 
 - `Shifts.py` is the module for solving the 3-rd task of the hackathon, consists of a function `find_shifts()`, which takes the input from the model used for task 2, and outputs two variables: a list of shift schedules, and the list of total couriers reuqired on each day.
+
+- 'Task_3_Solution_Design.pdf` is a pdf file, containing the discription of the task 3 solution.
