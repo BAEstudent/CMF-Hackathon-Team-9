@@ -266,7 +266,7 @@ TARGET = 'delay'
 
 #make predictions by loading the weights
 
-def pred_cur(orders, dates, areas, FEATURES):
+def pred_cur(orders_pred, dates, areas, FEATURES):
     preds_by_area = []
 
     for area in tqdm(areas):
@@ -274,7 +274,7 @@ def pred_cur(orders, dates, areas, FEATURES):
         con = orders_pred[['date', f'area_id_{area}']].rename(columns={'date': 'dttm', f'area_id_{area}': 'orders_cnt'})
         con['orders_cnt'] = con['orders_cnt'].apply(np.ceil)
         reg = xgb.XGBClassifier()
-        reg.load_model(f'..\\courier hackathon\\weights2task\\area_{area}.json')
+        reg.load_model(f'..\\pythonProject\\weights2task\\area_{area}.json')
         con = create_features(con)
         con_var = vary_couriers(con, reg, FEATURES)
         predictions = choose_best_pred(con_var)['partners_cnt'].values
@@ -290,11 +290,11 @@ def pred_cur(orders, dates, areas, FEATURES):
 # In[10]:
 
 
-orders = pd.read_csv('orders.csv')
-areas = orders['delivery_area_id'].unique()
-orders_pred = pd.read_csv('orders_pred.csv')
-dates = orders_pred['date'].copy()
-pred_cur(orders_pred, dates, areas, FEATURES)
+# orders = pd.read_csv('orders.csv')
+# areas = orders['delivery_area_id'].unique()
+# orders_pred = pd.read_csv('orders_pred.csv')
+# dates = orders_pred['date'].copy()
+# pred_cur(orders_pred, dates, areas, FEATURES)
 
 
 # In[ ]:
