@@ -6,6 +6,12 @@ This is the Git repository for Team 9 hackathon solution. It consists of several
 - `Hackathon_Problem_3_Solution.ipynb`,
 which are the solutions for the hackathon taks from 1 to 3 respectively.
 
+### Pipeline
+
+- Training XGBoost model the whole time series data. Retrain on each area data. Finally we predict the number of orders. To better reflect the reality predictions were ceiled
+- From the orders data and delays given we train a separate XGBoost model for each area data to predict the class of the delay would be less or more than 0.05. After that we have 593 model weights that we can use for predictions. Prediction part consists of loading separate weights to the model for each separate area and predicting the value of couriers for each area.
+- To distribute the couriers by shifts we solve the task of linear programming, matching required constraints
+
 ### Tasks Solutions
 
 - Task 1 The num_orders_pred(orders_file) receives a file with the demand data as input, and returns a pandas DataFrame with date indices for the following week (starting from the last date in the input file) and columns consisting of predicted numbers of orders for each delivery area ('delivery_id_area') from 0 to 592.
