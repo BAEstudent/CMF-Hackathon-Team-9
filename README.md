@@ -2,7 +2,7 @@
 
 This is the Git repository for Team 9 hackathon solution. It consists of several files:
 - `Final_part_1.py`,
-- `task 2, delay correction.ipynb`,
+- `Task 2.ipynb`,
 - `Hackathon_Problem_3_Solution.ipynb`,
 which are the solutions for the hackathon taks from 1 to 3 respectively.
 
