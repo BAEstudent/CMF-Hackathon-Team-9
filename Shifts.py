@@ -1,5 +1,8 @@
 # The funciton "find_shifts()" takes in a list of integers (the demand for couriers),
 # and returns the matrix of optimal shifts and the total number of shifts.
+import pandas as pd
+import numpy as np
+import cvxpy as cp
 
 def find_shifts(demands):
     ## Lists of variables for each weekday
@@ -24,22 +27,22 @@ def find_shifts(demands):
 
         cons = [
             N >= 0,
-            cp.sum(N[:, 0]) >= demand[0],
-            cp.sum(N[:, 0]) + cp.sum(N[:, 1]) >= demand[1],
-            cp.sum(N[:, 0]) + cp.sum(N[:, 1]) + cp.sum(N[:, 2]) >= demand[2],
-            cp.sum(N[:, 0]) + cp.sum(N[:, 1]) + cp.sum(N[:, 2]) + cp.sum(N[:, 3]) >= demand[3],
-            cp.sum(N[1:, 0]) + cp.sum(N[:, 1]) + cp.sum(N[:, 2]) + cp.sum(N[:, 3]) + cp.sum(N[:3, 4]) >= demand[4],
+            cp.sum(N[:, 0]) >= demand.iloc[0],
+            cp.sum(N[:, 0]) + cp.sum(N[:, 1]) >= demand.iloc[1],
+            cp.sum(N[:, 0]) + cp.sum(N[:, 1]) + cp.sum(N[:, 2]) >= demand.iloc[2],
+            cp.sum(N[:, 0]) + cp.sum(N[:, 1]) + cp.sum(N[:, 2]) + cp.sum(N[:, 3]) >= demand.iloc[3],
+            cp.sum(N[1:, 0]) + cp.sum(N[:, 1]) + cp.sum(N[:, 2]) + cp.sum(N[:, 3]) + cp.sum(N[:3, 4]) >= demand.iloc[4],
             cp.sum(N[2:, 0]) + cp.sum(N[1:, 1]) + cp.sum(N[:, 2]) + cp.sum(N[:, 3]) +
-            cp.sum(N[:3, 4]) + cp.sum(N[:2, 5]) >= demand[5],
+            cp.sum(N[:3, 4]) + cp.sum(N[:2, 5]) >= demand.iloc[5],
             cp.sum(N[3:, 0]) + cp.sum(N[2:, 1]) + cp.sum(N[1:, 2]) + cp.sum(N[:, 3]) +
-            cp.sum(N[:3, 4]) + cp.sum(N[:2, 5]) + cp.sum(N[:1, 6]) >= demand[6],
+            cp.sum(N[:3, 4]) + cp.sum(N[:2, 5]) + cp.sum(N[:1, 6]) >= demand.iloc[6],
             N[4, 1] + cp.sum(N[3:, 2]) + cp.sum(N[2:, 3]) + cp.sum(N[1:3, 4]) +
-            cp.sum(N[:2, 5]) + cp.sum(N[:1, 6]) + N[0, 7] >= demand[7],
+            cp.sum(N[:2, 5]) + cp.sum(N[:1, 6]) + N[0, 7] >= demand.iloc[7],
             N[4, 1] + cp.sum(N[2:, 2]) + cp.sum(N[1:, 3]) +
-            cp.sum(N[:3, 4]) + cp.sum(N[:2, 5]) + cp.sum(N[:1, 6]) + N[0, 7] >= demand[8],
+            cp.sum(N[:3, 4]) + cp.sum(N[:2, 5]) + cp.sum(N[:1, 6]) + N[0, 7] >= demand.iloc[8],
             N[4, 2] + cp.sum(N[3:4, 3]) + cp.sum(N[2:3, 4]) + cp.sum(N[1:2, 5]) +
-            cp.sum(N[0:1, 6]) + N[0, 7] >= demand[9],
-            N[4, 3] + N[3, 4] + N[1, 6] + N[0, 7] >= demand[10],
+            cp.sum(N[0:1, 6]) + N[0, 7] >= demand.iloc[9],
+            N[4, 3] + N[3, 4] + N[1, 6] + N[0, 7] >= demand.iloc[10],
         ]
         prob = cp.Problem(obj, cons)
 
@@ -50,3 +53,15 @@ def find_shifts(demands):
         Shifts.append(N.value)
 
     return Shifts, Nums_of_couriers
+
+def get_all_shifts(data):
+    all_shifts = []
+    for id in data:
+        a, b =(find_shifts(chunks(data[id])))
+        all_shifts.append([a,b])
+    return(all_shifts)
+
+def chunks(lst):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), 11):
+        yield lst[i:i + 11]
